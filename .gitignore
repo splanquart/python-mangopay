@@ -3,5 +3,6 @@
 .DS_Store
 .env
 venv
+*~
 tests/credentials/*
 docs/_build/

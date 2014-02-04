@@ -12,20 +12,15 @@ instanciate a new handler which is basically a connection authentification.
 
 To create a new handler, you have to provide several parameters.
 
-``API_PARTNER_ID``
+``API_CLIENT_ID``
 ..................
 
-This is the partner identifier used by mangopay_ to identify you.
+This is the client identifier used by mangopay_ to identify you.
 
-``API_PRIVATE_KEY``
+``API_PASSPHRASE``
 ...................
 
-This is the certificat used in each requests.
-
-``API_PRIVATE_KEY_PASSWORD``
-............................
-
-This is the password linked to the certificat.
+This is the passphrase used in each requests.
 
 ``API_HOST``
 ............
@@ -68,7 +63,7 @@ For required parameters you have to refer to the `reference api`_.
 Users
 .....
 
-Creating a new naturla user ::
+Creating a new natural user ::
 
     from mangopay.resources import NaturalUser
     from datetime import date
@@ -107,10 +102,10 @@ Affecting a wallet to an existing user ::
     from mangopay.resources import Wallet
 
     wallet = Wallet(tag='wallet for user n.1',
-                    name='Florent Messa wallet',
-                    description='A new wallet for Florent Messa',
-                    raising_goal_amount=1200,
-                    users=[user])
+                    name='Stephane Planquart wallet',
+                    description='A new wallet for Stephane Planquart',
+                    currency=Wallet.EUR
+                    owners=[user])
     wallet.save(handler) # save the new wallet
 
     print wallet.get_pk() # 1

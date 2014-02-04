@@ -16,10 +16,20 @@ class BaseModel(BaseApiModel):
     creation_date = DateTimeField(api_name='CreationDate')
     update_date = DateTimeField(api_name='UpdateDate')
 
+@python_2_unicode_compatible
+class User(BaseModel):
+    email = EmailField(api_name='Email', required=True)
+
+    class Meta:
+        verbose_name = 'user'
+        verbose_name_plural = 'users'
+
+    def __str__(self):
+        return self.email
+
 
 @python_2_unicode_compatible
-class NaturalUser(BaseModel):
-    email = EmailField(api_name='Email', required=True)
+class NaturalUser(User):
     first_name = CharField(api_name='FirstName', required=True)
     last_name = CharField(api_name='LastName', required=True)
     address = CharField(api_name='Address', required=False)
@@ -40,12 +50,11 @@ class NaturalUser(BaseModel):
 
 
 @python_2_unicode_compatible
-class LegalUser(BaseModel):
+class LegalUser(User):
     LEGAL_PERSON_TYPE_CHOICES = Choices(
         ('BUSINESS', 'business', 'business'),
         ('ORGANIZATION', 'origanization', 'organization')
     )
-    email = EmailField(api_name='Email', required=True)
     name = CharField(api_name='Name', required=True)
     legal_person_type = CharField(api_name='LegalPersonType', required=True,
                                   choices=LEGAL_PERSON_TYPE_CHOICES,
@@ -59,7 +68,7 @@ class LegalUser(BaseModel):
     legal_representative_nationality = CharField(api_name='LegalRepresentativeNationality', required=True)
     legal_representative_country_of_residence = CharField(api_name='LegalRepresentativeCountryOfResidence', required=True)
     statute = CharField(api_name='Statute', required=False)
-    occupation = CharField(api_name='ProofOfRegistration', required=False)
+    proof_of_registration = CharField(api_name='ProofOfRegistration', required=False)
     shareholder_declaration = CharField(api_name='ShareholderDeclaration', required=False)
     
     class Meta:
@@ -67,8 +76,33 @@ class LegalUser(BaseModel):
         verbose_name_plural = 'users/legal'
 
     def __str__(self):
-        return '%s %s' % (self.first_name, self.last_name)
+        return self.name
     
+@python_2_unicode_compatible
+class Wallet(BaseModel):
+    CURRENCY_CHOICES = Choices(
+        ('EUR', 'EUR', 'Euros'),
+        ('USD', 'USD', 'US Dollar'),
+        ('GBP', 'GBP', 'British Pound'),
+        ('PLN', 'PLN', 'Zloty'),
+        ('CHF', 'CHF', 'Swiss Franc'),
+    )
+    description = CharField(api_name='Description', required=True)
+
+    currency = CharField(api_name='Currency',
+                         choices=CURRENCY_CHOICES, default=CURRENCY_CHOICES.EUR)
+    #amount = AmountField(api_name='Amount')
+    is_closed = BooleanField(api_name='IsClosed')
+
+    owners = ManyToManyField(User, api_name='Owners', related_name='wallets')
+
+    class Meta:
+        verbose_name = 'wallet'
+        verbose_name_plural = 'wallets'
+
+    def __str__(self):
+        return self.description
+
 # class Beneficiary(BaseModel):
 #     user = ForeignKeyField(User, api_name='UserID', required=True,
 #                            related_name='beneficiaries')
