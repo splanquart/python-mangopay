@@ -1,0 +1,123 @@
+0.4 - 2014-02-04
+================
+
+ - First step in MangoPay V2 port : Basic Authentification
+ - NaturalUser and LegalUser
+
+0.3.1 - 2013-11-14
+==================
+
+- Add json response when accessible in APIError and DecodeError exceptions
+
+0.3 - 2013-09-17
+================
+
+- Add immediate and recurrent contribution, thanks to nidusfr
+- Add answer_code and answer_message in Contribution, thanks to splanquart
+- Port to Python 3.3, thanks to ebewe
+
+0.2.15 - 2013-06-21
+===================
+
+- Add beneficiary attribute to Withdrawal resource
+
+0.2.14 - 2013-06-20
+===================
+
+- Add Beneficiary resource
+
+0.2.13 - 2013-06-18
+===================
+
+- ``handler`` is now not required in save method if the instance has been retrieved
+
+0.2.12 - 2013-06-05
+===================
+
+- Fix inherited models representations
+- Add related_name for all foreign keys
+- Provide a way to override urls when processing api requests.
+- Add OneToOneField for StrongAuthentication
+- Add request_error signal
+- Laps timing is now sent in request_finished signal
+
+0.2.11 - 2013-05-29
+===================
+
+- Add support for date < 1900 with safe converter
+
+0.2.10 - 2013-05-05
+===================
+
+- Rewrite exceptions handling
+
+0.2.9 - 2013-05-04
+==================
+
+- Catch ConnectionError when connection is reset by peer
+
+0.2.8 - 2013-04-30
+==================
+
+- Add DateField for User.birthday attribute
+- Add choices and default attributes to Field class
+
+0.2.7 - 2013-04-18
+==================
+
+- Add model inheritance in ApiObjectBase
+
+0.2.6.1 - 2013-04-18
+====================
+
+- Fix typo in WithdrawalContribution for amount_declared
+
+0.2.6 - 2013-04-17
+==================
+
+- Added WithdrawalContribution resource
+
+0.2.5 - 2013-04-15
+==================
+
+- Signals handling via blinker
+- Added **request_finished** signal to add a callback when a request is finished
+- Added **request_started** signal to add a callback when a request is starting
+- Added **pre_save** signal to add a callback when a new resource will be created
+- Added **post_save** signal to add a callback when a new resource is created
+
+0.2.4 - 2012-07-24
+==================
+
+- Added **culture** parameter to Contribution to specify the language
+used in payment.
+
+0.2.3 - 2012-07-23
+==================
+
+- Added time between the beginning and the end of the requests in logger.
+
+0.2.2 - 2012-06-28
+==================
+
+- Removed imports in `__init__.py`, use modules instead.
+
+0.2.1 - 2012-06-20
+==================
+
+- Added **type** attribute in Contribution resource to set the type of the
+transacti n.
+
+0.2 - 2012-02-03
+================
+
+- Added better support for handling errors.
+- Added new resources: PaymentCard, TransferRefund, Refund.
+- Added **host** optional parameter to LeetchiAPI object.
+- Fix bugs: reuse the timestamp to generate host and auth signature.
+- Added AmountField and its descriptor to convert cts.
+
+0.1 - 2011-11-09
+================
+
+- Initial release
