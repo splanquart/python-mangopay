@@ -147,6 +147,10 @@ class ListField(Field):
     pass
 
 
+class TupleField(Field):
+    pass
+
+
 class BooleanField(IntegerField):
     def api_value(self, value):
         value = super(BooleanField, self).api_value(value)
@@ -165,29 +169,16 @@ class EmailField(CharField):
     pass
 
 
-class AmountField(IntegerField):
-    def add_to_class(self, klass, name):
-        super(AmountField, self).add_to_class(klass, name)
+class AmountField(TupleField):
+    def api_value(self, value):
+        value = super(AmountField, self).api_value(value)
 
-        self.descriptior = name + '_converted'
+        return {'Amount': value[0], 'Currency': value[1]}
 
-        setattr(klass, self.descriptior, AmountDescriptor(name))
+    def python_value(self, value):
+        value = super(AmountField, self).python_value(value)
 
-
-class AmountDescriptor(object):
-    def __init__(self, name):
-        self.field_name = name
-
-    def __get__(self, instance, instance_type=None):
-        amount = getattr(instance, self.field_name)
-
-        if amount:
-            return amount / 100.0
-
-        return 0
-
-    def __set__(self, instance, value):
-        setattr(instance, self.field_name, value * 100.0)
+        return (value['Amount'], value['Currency'])
 
 
 class ReverseOneToOneRelatedObject(object):

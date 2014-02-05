@@ -116,44 +116,31 @@ Retrieving all wallets for an existing user ::
 
     wallet_list = user.wallet_set
 
-By default all amount are in centimes but this library provides
-an helper to quickly convert an amount to a readable one ::
-
-    print wallet.raising_goal_amount # 1200
-    print wallet.raising_goal_amount_converted # 12.00
-
-Contributions
-.............
+Payin
+.....
 
 A contribution a the only way to put money on a wallet,
 with the `mangopay`_ API you can also put money a user wallet.
 
-Creating a new contribution for a dedicated wallet ::
+Creating a new pay-in for a dedicated wallet ::
 
-    from leetchi.resources import Contribution, Wallet, User
+    from mangopay.resources import Payin, Wallet, NaturalUser
 
-    user = User.get(1, handler)
+    user = NaturalUser.get(1, handler)
     wallet = Wallet.get(1, handler)
 
-    contribution = Contribution(user=user,
-                                wallet=wallet,
-                                amount=1000,
-                                return_url='http://my-website/back-url',
-                                client_fee_amount=0)
-    contribution.save(handler)
+    payin = Payin(author_id=user.id,
+                  credited_wallet_id=wallet.id,
+                  debited_funds=(200, 'EUR'),
+                  fees=(4, 'EUR'),
+                  return_url='http://www.google.fr',
+                  culture='fr',
+                  card_type='CB_VISA_MASTERCARD')
+    payin.save(handler)
 
-    print contribution.is_success() # False
-    print contribution.is_succeeded # False
-    print contribution.is_completed # False
-
-Creating a new contribution for a personal wallet ::
-
-    contribution = Contribution(user=user,
-                                wallet_id=0,
-                                amount=1000,
-                                return_url='http://my-website/back-url',
-                                client_fee_amount=0)
-    contribution.save(handler)
+    print payin.is_success() # False
+    print payin.is_succeeded # False
+    print payin.is_completed # False
 
 Transfers
 .........

@@ -11,10 +11,11 @@ from .query import InsertQuery, UpdateQuery
 
 
 class BaseModel(BaseApiModel):
-    id = PrimaryKeyField(api_name='ID')
+    id = PrimaryKeyField(api_name='Id')
     tag = CharField(api_name='Tag')
     creation_date = DateTimeField(api_name='CreationDate')
     update_date = DateTimeField(api_name='UpdateDate')
+
 
 @python_2_unicode_compatible
 class User(BaseModel):
@@ -35,12 +36,13 @@ class NaturalUser(User):
     address = CharField(api_name='Address', required=False)
     birthday = DateField(api_name='Birthday', required=False)
     nationality = CharField(api_name='Nationality', required=True)
-    country_of_residence = CharField(api_name='CountryOfResidence', required=True)
+    country_of_residence = CharField(api_name='CountryOfResidence',
+                                     required=True)
     occupation = CharField(api_name='Occupation', required=False)
     income_range = CharField(api_name='IncomeRange', required=False)
     proof_of_identity = CharField(api_name='ProofOfIdentity', required=False)
     proof_of_address = CharField(api_name='ProofOfAddress', required=False)
-    
+
     class Meta:
         verbose_name = 'natural_user'
         verbose_name_plural = 'users/natural'
@@ -59,7 +61,8 @@ class LegalUser(User):
     legal_person_type = CharField(api_name='LegalPersonType', required=True,
                                   choices=LEGAL_PERSON_TYPE_CHOICES,
                                   default=LEGAL_PERSON_TYPE_CHOICES.business)
-    headquarters_address = CharField(api_name='HeadquartersAddress', required=False)
+    headquarters_address = CharField(api_name='HeadquartersAddress',
+                                     required=False)
     legal_representative_first_name = CharField(api_name='LegalRepresentativeFirstName', required=True)
     legal_representative_last_name = CharField(api_name='LegalRepresentativeLastName', required=True)
     legal_representative_address = CharField(api_name='LegalRepresentativeAddress', required=False)
@@ -68,16 +71,19 @@ class LegalUser(User):
     legal_representative_nationality = CharField(api_name='LegalRepresentativeNationality', required=True)
     legal_representative_country_of_residence = CharField(api_name='LegalRepresentativeCountryOfResidence', required=True)
     statute = CharField(api_name='Statute', required=False)
-    proof_of_registration = CharField(api_name='ProofOfRegistration', required=False)
-    shareholder_declaration = CharField(api_name='ShareholderDeclaration', required=False)
-    
+    proof_of_registration = CharField(api_name='ProofOfRegistration',
+                                      required=False)
+    shareholder_declaration = CharField(api_name='ShareholderDeclaration',
+                                        required=False)
+
     class Meta:
         verbose_name = 'legal_user'
         verbose_name_plural = 'users/legal'
 
     def __str__(self):
         return self.name
-    
+
+
 @python_2_unicode_compatible
 class Wallet(BaseModel):
     CURRENCY_CHOICES = Choices(
@@ -90,7 +96,8 @@ class Wallet(BaseModel):
     description = CharField(api_name='Description', required=True)
 
     currency = CharField(api_name='Currency',
-                         choices=CURRENCY_CHOICES, default=CURRENCY_CHOICES.EUR)
+                         choices=CURRENCY_CHOICES,
+                         default=CURRENCY_CHOICES.EUR)
     #amount = AmountField(api_name='Amount')
     is_closed = BooleanField(api_name='IsClosed')
 
@@ -102,6 +109,45 @@ class Wallet(BaseModel):
 
     def __str__(self):
         return self.description
+
+
+class Payin(BaseModel):
+    STATUS_CHOICES = Choices(
+        ('CREATED', 'created', 'Created'),
+        ('SUCCEEDED', 'succeeded', 'Succeeded'),
+        ('FAILED', 'failed', 'Failed')
+    )
+    SECUREMODE_CHOICES = Choices(
+        ('DEFAULT', 'default', 'Default'),
+        ('FORCE', 'force', 'Force')
+    )
+    author_id = IntegerField(api_name='AuthorId', required=True)
+    debited_funds = AmountField(api_name='DebitedFunds', required=True)
+    fees = AmountField(api_name='Fees')
+    credited_wallet_id = IntegerField(api_name='CreditedWalletId',
+                                      required=True)
+    culture = CharField(api_name='Culture')
+    card_type = CharField(api_name='CardType')
+    secure_mode = CharField(api_name='SecureMode')
+    credited_funds = AmountField(api_name='CreditedFunds', required=False)
+    credited_user_id = IntegerField(api_name='CreditedUserId', required=False)
+    status = CharField(api_name='Status', required=False,
+                       choices=STATUS_CHOICES, default=STATUS_CHOICES.created)
+    result_code = CharField(api_name='ResultCode')
+    result_message = CharField(api_name='ResultMessage')
+    execution_date = DateTimeField(api_name='ExecutionDate')
+    type = CharField(api_name='Type')
+    nature = CharField(api_name='Nature')
+    payment_type = CharField(api_name='PaymentType')
+    execution_type = CharField(api_name='ExecutionType')
+    redirect_url = CharField(api_name='RedirectURL', required=False)
+    return_url = CharField(api_name='ReturnURL', required=True)
+    template_url = CharField(api_name='TemplateURL', required=False)
+
+    class Meta:
+        verbose_name = 'payin'
+        verbose_name_plural = 'payins/card/web'
+
 
 # class Beneficiary(BaseModel):
 #     user = ForeignKeyField(User, api_name='UserID', required=True,

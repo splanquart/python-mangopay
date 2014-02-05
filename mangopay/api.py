@@ -14,8 +14,6 @@ except ImportError:
 
 from .exceptions import APIError, DecodeError
 
-from .utils import openssl_pkey_get_private, openssl_sign
-
 from .signals import request_finished, request_started, request_error
 
 logger = logging.getLogger('mangopay')
@@ -31,7 +29,7 @@ def check_required(required, **kwargs):
         raise APIError(None, 'Missing required args: %s' % ', '.join(missing_requirements))
 
 
-class MangoPayAPI(object):
+class MangopayAPI(object):
     sandbox_host = 'https://api.sandbox.mangopay.com'
     production_host = 'https://api.mangopay.com'
 
@@ -49,10 +47,10 @@ class MangoPayAPI(object):
             self.host = host
 
     def _auth_basic(self):
-        auth_chaine = 'Basic ' + base64.b64encode('%s:%s' % (self.client_id, self.passphrase))
+        auth_chaine = 'Basic ' + base64.b64encode('%s:%s' % (self.client_id,
+                                                            self.passphrase))
 
         return auth_chaine
-
 
     def _format_data(self, method, url_path, body):
         data = '%s|%s|' % (method, self._generate_api_url(url_path))
@@ -66,13 +64,13 @@ class MangoPayAPI(object):
         if not timestamp:
             timestamp = int(time.time())
 
-        return '%s%s' % (self.host, self._generate_api_url(url)) + '?ts=%d' % timestamp
+        return '%s%s' % (self.host, 
+                         self._generate_api_url(url)) + '?ts=%d' % timestamp
 
     def _generate_api_url(self, request_uri):
         return '/v2/%s%s' % (self.partner_id, request_uri)
 
     def request(self, method, url, data=None):
-
         timestamp = time.time()
 
         auth_chaine = self._auth_basic()
