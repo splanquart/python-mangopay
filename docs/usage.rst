@@ -119,8 +119,7 @@ Retrieving all wallets for an existing user ::
 Payin
 .....
 
-A contribution a the only way to put money on a wallet,
-with the `mangopay`_ API you can also put money a user wallet.
+A pay-in is a way to put money on a wallet.
 
 Creating a new pay-in for a dedicated wallet ::
 
