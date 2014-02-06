@@ -98,8 +98,7 @@ class Wallet(BaseModel):
     currency = CharField(api_name='Currency',
                          choices=CURRENCY_CHOICES,
                          default=CURRENCY_CHOICES.EUR)
-    #amount = AmountField(api_name='Amount')
-    is_closed = BooleanField(api_name='IsClosed')
+    balance = AmountField(api_name='Balance')
 
     owners = ManyToManyField(User, api_name='Owners', related_name='wallets')
 
@@ -121,25 +120,44 @@ class Payin(BaseModel):
         ('DEFAULT', 'default', 'Default'),
         ('FORCE', 'force', 'Force')
     )
-    author_id = IntegerField(api_name='AuthorId', required=True)
+    TYPE_CHOICES = Choices(
+        ('PAY_IN', 'pay_in', 'Pay In'),
+        ('PAY_OUT', 'pay_out', 'Pay Out'),
+        ('TRANSFER', 'transfer', 'Transfer')
+    )
+    NATURE_CHOICES = Choices(
+        ('REGULAR', 'regular', 'Regular'),
+        ('REFUND', 'refund', 'Refund'),
+        ('REPUDIATION', 'repudiation', 'Repudiation')
+    )
+    EXECUTION_TYPE_CHOICES = Choices(
+        ('WEB', 'web', 'Payin web'),
+        ('DIRECT', 'direct', 'Direct Payin')
+    )
+    author = ForeignKeyField(User, api_name='AuthorId', required=True,
+                             related_name='payins')
+    credited_wallet = ForeignKeyField(Wallet, api_name='CreditedWalletId',
+                                      related_name='payins', required=True)
+    credited_user_id = ForeignKeyField(User, api_name='CreditedUserId',
+                                       related_name='payins', required=False)
     debited_funds = AmountField(api_name='DebitedFunds', required=True)
-    fees = AmountField(api_name='Fees')
-    credited_wallet_id = IntegerField(api_name='CreditedWalletId',
-                                      required=True)
-    culture = CharField(api_name='Culture')
-    card_type = CharField(api_name='CardType')
-    secure_mode = CharField(api_name='SecureMode')
+    fees = AmountField(api_name='Fees', required=False)
     credited_funds = AmountField(api_name='CreditedFunds', required=False)
-    credited_user_id = IntegerField(api_name='CreditedUserId', required=False)
+    culture = CharField(api_name='Culture')
+    card_type = CharField(api_name='CardType', default='CB_VISA_MASTERCARD')
+    secure_mode = CharField(api_name='SecureMode',
+                            choices=SECUREMODE_CHOICES,
+                            default=SECUREMODE_CHOICES.default)
     status = CharField(api_name='Status', required=False,
                        choices=STATUS_CHOICES, default=STATUS_CHOICES.created)
     result_code = CharField(api_name='ResultCode')
     result_message = CharField(api_name='ResultMessage')
     execution_date = DateTimeField(api_name='ExecutionDate')
-    type = CharField(api_name='Type')
+    type = CharField(api_name='Type', choices=TYPE_CHOICES)
     nature = CharField(api_name='Nature')
-    payment_type = CharField(api_name='PaymentType')
-    execution_type = CharField(api_name='ExecutionType')
+    payment_type = CharField(api_name='PaymentType', choices=NATURE_CHOICES)
+    execution_type = CharField(api_name='ExecutionType',
+                               choices=EXECUTION_TYPE_CHOICES)
     redirect_url = CharField(api_name='RedirectURL', required=False)
     return_url = CharField(api_name='ReturnURL', required=True)
     template_url = CharField(api_name='TemplateURL', required=False)

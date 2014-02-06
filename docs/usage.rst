@@ -104,7 +104,7 @@ Affecting a wallet to an existing user ::
     wallet = Wallet(tag='wallet for user n.1',
                     name='Stephane Planquart wallet',
                     description='A new wallet for Stephane Planquart',
-                    currency=Wallet.EUR
+                    currency='EUR',
                     owners=[user])
     wallet.save(handler) # save the new wallet
 
@@ -128,13 +128,12 @@ Creating a new pay-in for a dedicated wallet ::
     user = NaturalUser.get(1, handler)
     wallet = Wallet.get(1, handler)
 
-    payin = Payin(author_id=user.id,
+    payin = Payin(author=user,
                   credited_wallet_id=wallet.id,
                   debited_funds=(200, 'EUR'),
                   fees=(4, 'EUR'),
                   return_url='http://www.google.fr',
-                  culture='fr',
-                  card_type='CB_VISA_MASTERCARD')
+                  culture='fr')
     payin.save(handler)
 
     print payin.is_success() # False
