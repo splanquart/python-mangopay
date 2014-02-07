@@ -2,7 +2,7 @@ from .base import BaseApiModel
 
 from .fields import (PrimaryKeyField, EmailField, CharField,
                      BooleanField, DateTimeField, DateField,
-                     IntegerField, ManyToManyField,
+                     IntegerField, ManyToManyField, TemplateField,
                      ForeignKeyField, AmountField, OneToOneField)
 
 from .utils import Choices
@@ -157,14 +157,30 @@ class Payin(BaseModel):
     nature = CharField(api_name='Nature')
     payment_type = CharField(api_name='PaymentType', choices=NATURE_CHOICES)
     execution_type = CharField(api_name='ExecutionType',
-                               choices=EXECUTION_TYPE_CHOICES)
+                               choices=EXECUTION_TYPE_CHOICES,
+                               default=EXECUTION_TYPE_CHOICES.web)
     redirect_url = CharField(api_name='RedirectURL', required=False)
     return_url = CharField(api_name='ReturnURL', required=True)
+    template_url_options = TemplateField(api_name='TemplateURLOptions',
+                                         required=False)
     template_url = CharField(api_name='TemplateURL', required=False)
 
     class Meta:
         verbose_name = 'payin'
-        verbose_name_plural = 'payins/card/web'
+        verbose_name_plural = 'payins'
+
+        class get_url:
+            def __call__(self, params):
+                if params['execution_type'] == 'WEB':
+                    return '/payins/card/web'
+                elif params['execution_type'] == 'DIRECT':
+                    return '/payins/card/direct'
+                raise Exception('You must define execution_type')
+
+        urls = {
+            InsertQuery.identifier: get_url(),
+            # UpdateQuery.identifier: lambda params, reference: '/payins/card/web'
+        }
 
 
 # class Beneficiary(BaseModel):

@@ -140,6 +140,27 @@ Creating a new pay-in for a dedicated wallet ::
     print payin.is_succeeded # False
     print payin.is_completed # False
 
+Use template_url ::
+
+    from mangopay.resources import Payin, Wallet, NaturalUser
+
+    user = NaturalUser.get(1, handler)
+    wallet = Wallet.get(1, handler)
+
+    payin = Payin(author=user,
+                  credited_wallet_id=wallet.id,
+                  debited_funds=(200, 'EUR'),
+                  fees=(4, 'EUR'),
+                  return_url='http://www.google.fr',
+                  culture='fr',
+                  template_url_options=('https://www.mysite.com/templatePayline', 
+                                        'https://www.mysitecom/templateOgone'))
+    payin.save(handler)
+
+    print payin.is_success() # False
+    print payin.is_succeeded # False
+    print payin.is_completed # False
+
 Transfers
 .........
 

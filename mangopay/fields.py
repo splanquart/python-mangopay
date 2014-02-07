@@ -181,6 +181,20 @@ class AmountField(TupleField):
         return (value['Amount'], value['Currency'])
 
 
+class TemplateField(TupleField):
+    def api_value(self, value):
+        value = super(TemplateField, self).api_value(value)
+        if value is None:
+            return None
+        return {'PAYLINE': value[0], 'OGONE': value[1]}
+
+    def python_value(self, value):
+        value = super(TemplateField, self).python_value(value)
+        if value is None:
+            return None
+        return (value['PAYLINE'], value['OGONE'])
+
+
 class ReverseOneToOneRelatedObject(object):
     def __init__(self, related_model, name):
         self.field_name = name

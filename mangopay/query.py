@@ -78,11 +78,10 @@ class InsertQuery(BaseQuery):
         if callable(url):
             url = url(self.insert_query)
 
-        result, data = handler.request(self.method,
-                                       url,
-                                       data=data)
-
-        return dict(self.parse_result(data), **{'handler': handler})
+        result, data_output = handler.request(self.method,
+                                              url,
+                                              data=data)
+        return dict(self.parse_result(data_output), **{'handler': handler})
 
 
 class UpdateQuery(BaseQuery):
