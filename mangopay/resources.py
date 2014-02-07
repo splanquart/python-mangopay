@@ -179,9 +179,65 @@ class Payin(BaseModel):
 
         urls = {
             InsertQuery.identifier: get_url(),
-            # UpdateQuery.identifier: lambda params, reference: '/payins/card/web'
         }
 
+    def is_success(self):
+        return self.status == Refund.STATUS_CHOICES.succeeded
+
+
+class Refund(BaseModel):
+    STATUS_CHOICES = Choices(
+        ('CREATED', 'created', 'Created'),
+        ('SUCCEEDED', 'succeeded', 'Succeeded'),
+        ('FAILED', 'failed', 'Failed')
+    )
+    TRANSACTION_TYPE_CHOICES = Choices(
+        ('PAY_IN', 'pay_in', 'Pay In'),
+        ('TRANSFER', 'transfer', 'Transfer')
+    )
+
+    author = ForeignKeyField(User, api_name='InitialTransactionId',
+                             required=True, related_name='refunds')
+    initial_transaction = ForeignKeyField(Payin,
+                                          api_name='InitialTransactionId',
+                                          required=True,
+                                          related_name='refunds')
+    initial_transaction_type = CharField(api_name='InitialTransactionType',
+                                         choices=TRANSACTION_TYPE_CHOICES,
+                                         required=False)
+    credited_user_id = ForeignKeyField(User, api_name='CreditedUserId',
+                                       related_name='payins', required=False)
+    debited_funds = AmountField(api_name='DebitedFunds', required=False)
+    fees = AmountField(api_name='Fees', required=False)
+    credited_funds = AmountField(api_name='CreditedFunds', required=False)
+    credited_wallet = ForeignKeyField(Wallet, api_name='CreditedWalletId',
+                                      related_name='refund', required=False)
+    debited_wallet = ForeignKeyField(Wallet, api_name='DebitedWalletId',
+                                      related_name='refund', required=False)
+    nature = CharField(api_name='Nature')
+
+
+    class Meta:
+        verbose_name = 'refund'
+        verbose_name_plural = 'refunds'
+
+        class get_url:
+            def __call__(self, params):
+                ref_id = params['initial_transaction_id']
+
+                if isinstance(params['initial_transaction'], Payin):
+                    return '/payins/%s/refund' % ref_id
+                elif params['execution_type'] == 'DIRECT':
+                    return '/transfert/%s/refund' % ref_id
+                raise Exception('You must define execution_type')
+
+        urls = {
+            InsertQuery.identifier: get_url(),
+            UpdateQuery.identifier: get_url()
+        }
+
+    def is_success(self):
+        return self.status == Refund.STATUS_CHOICES.succeeded
 
 # class Beneficiary(BaseModel):
 #     user = ForeignKeyField(User, api_name='UserID', required=True,
@@ -417,27 +473,6 @@ class Payin(BaseModel):
 #     class Meta:
 #         verbose_name = 'withdrawal'
 #         verbose_name_plural = 'withdrawals'
-# 
-# 
-# class Refund(BaseModel):
-#     user = ForeignKeyField(User, api_name='UserID', required=True,
-#                            related_name='refunds')
-#     contribution = ForeignKeyField(Contribution,
-#                                    api_name='ContributionID',
-#                                    required=True,
-#                                    related_name='refunds')
-# 
-#     is_succeeded = BooleanField(api_name='IsSucceeded')
-#     is_completed = BooleanField(api_name='IsCompleted')
-# 
-#     error = CharField(api_name='Error')
-# 
-#     class Meta:
-#         verbose_name = 'refund'
-#         verbose_name_plural = 'refunds'
-# 
-#     def is_success(self):
-#         return self.is_succeeded and self.is_completed
 # 
 # 
 # @python_2_unicode_compatible

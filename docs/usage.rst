@@ -137,8 +137,6 @@ Creating a new pay-in for a dedicated wallet ::
     payin.save(handler)
 
     print payin.is_success() # False
-    print payin.is_succeeded # False
-    print payin.is_completed # False
 
 Use template_url ::
 
@@ -158,8 +156,21 @@ Use template_url ::
     payin.save(handler)
 
     print payin.is_success() # False
-    print payin.is_succeeded # False
-    print payin.is_completed # False
+
+Refunds
+.......
+
+If you want to refund a payin and move back the money from
+a wallet to a credit card account ::
+
+    from mangopay.resources import Payin, User, Refund
+
+    user = NaturalUser.get(1, handler)
+    payin = Payin.get(1, handler)
+
+    refund = Refund(initial_transaction=payin,
+                    author=user)
+    refund.save(handler)
 
 Transfers
 .........
@@ -206,21 +217,6 @@ from one wallet to another ::
     print wallet.remaining_amount # 0
 
     print user.personal_wallet_amount # 1000
-
-Refunds
-.......
-
-If you want to refund a contribution and move back the money from
-a wallet to a credit card account ::
-
-    from leetchi.resources import Contribution, User, Refund
-
-    user = User.get(1, handler)
-    contribution = Contribution.get(1, handler)
-
-    refund = Refund(contribution=contribution,
-                    user=user)
-    refund.save(handler)
 
 Operations
 ..........
