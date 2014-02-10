@@ -4,7 +4,7 @@
 Installation
 ============
 
-1. Either check out python-leetchi from GitHub_ or to pull a release off PyPI_ ::
+1. Either check out python-mangopay from GitHub_ or to pull a release off PyPI_ ::
 
        pip install -e git+https://github.com/splanquart/python-mangopay.git#egg=python_mangopay
 

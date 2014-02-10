@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# python-leetchi documentation build configuration file, created by
+# python-mangopay documentation build configuration file, created by
 # sphinx-quickstart on Sat Jan  5 22:37:19 2013.
 #
 # This file is execfile()d with the current directory set to its containing dir.
@@ -168,7 +168,7 @@ html_static_path = ['_static']
 #html_file_suffix = None
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = 'python-leetchidoc'
+htmlhelp_basename = 'python-mangopaydoc'
 
 
 # -- Options for LaTeX output --------------------------------------------------
@@ -187,8 +187,8 @@ latex_elements = {
 # Grouping the document tree into LaTeX files. List of tuples
 # (source start file, target name, title, author, documentclass [howto/manual]).
 latex_documents = [
-  ('index', 'python-leetchi.tex', u'python-leetchi Documentation',
-   u'2012, Florent Messa and contributors', 'manual'),
+  ('index', 'python-mangopay.tex', u'python-mangopay Documentation',
+   u'2014, Florent Messa, Stephane Planquart and contributors', 'manual'),
 ]
 
 # The name of an image file (relative to this directory) to place at the top of
@@ -217,8 +217,8 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    ('index', 'python-leetchi', u'python-leetchi Documentation',
-     [u'2012, Florent Messa and contributors'], 1)
+    ('index', 'python-mangopay', u'python-mangopay Documentation',
+     [u'2014, Florent Messa, Stephane Planquart and contributors'], 1)
 ]
 
 # If true, show URL addresses after external links.
@@ -231,8 +231,8 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-  ('index', 'python-leetchi', u'python-leetchi Documentation',
-   u'2012, Florent Messa and contributors', 'python-leetchi', 'One line description of project.',
+  ('index', 'python-mangopay', u'python-mangopay Documentation',
+   u'2014, Florent Messa, Stephane Planquart and contributors', 'python-mangopay', 'One line description of project.',
    'Miscellaneous'),
 ]
 

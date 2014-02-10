@@ -177,7 +177,7 @@ Transfers
 
 Creating a transfer from a personal wallet to another wallet ::
 
-    from leetchi.resources import User, Transfer, Wallet
+    from mangopay.resources import User, Transfer, Wallet
 
     user = User.get(1, handler)
 
@@ -204,7 +204,7 @@ Transfer refunds
 If you want to cancel a transfer and move back the money
 from one wallet to another ::
 
-    from leetchi.resources import TransferRefund, Transfer, User
+    from mangopay.resources import TransferRefund, Transfer, User
 
     user = User.get(1, handler)
     transfer = Transfer.get(1, handler)
@@ -223,14 +223,15 @@ Operations
 
 Retrieving all operations for a dedicated user ::
 
-    from leetchi.resources import User
+    from mangopay.resources import User
 
     user = User.get(1, handler)
 
     operation_list = user.operation_set
 
 .. _mangopay: http://www.mangopay.com/
-.. _sandbox host: http://api.prod.leetchi.com
-.. _production host: http://api.prod.leetchi.com
+.. _sandbox host: https://api.sandbox.mangopay.com
+.. _production https://api.mangopay.com
+.. _python-leetchi: https://github.com/thoas/python-leetchi
 .. _peewee: https://github.com/coleifer/peewee
 .. _reference api: http://www.mangopay.com/api-references/
