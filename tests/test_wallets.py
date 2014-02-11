@@ -2,7 +2,7 @@ import unittest
 
 from datetime import date
 
-from .resources import handler, NaturalUser, Wallet
+from tests.resources import handler, NaturalUser, Wallet
 
 
 class WalletsTest(unittest.TestCase):
@@ -25,16 +25,22 @@ class WalletsTest(unittest.TestCase):
             'tag': 'user',
             'name': 'Mark Zuckerberg wallet',
             'description': 'Wallet of Mark Zuckerberg',
-            'users': [user]
+            'owners': [user]
         }
 
         wallet = Wallet(**wallet_params)
         wallet.save(handler=handler)
-
+        print "wallet %r" % wallet.__dict__
         params = dict(wallet_params, **{
             'currency': 'EUR',
-            'balance': {'currency': 'EUR', 'amount': 0}
+            'balance': (0, 'EUR')
         })
+
+        from mangopay.signals import request_started
+
+        def print_infos(signal, **kw):
+            print("Before send data : %r" % kw)
+        request_started.connect(print_infos)
 
         for k, v in params.items():
             self.assertEqual(getattr(wallet, k), v)

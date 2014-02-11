@@ -179,24 +179,22 @@ Creating a transfer from a personal wallet to another wallet ::
 
     from mangopay.resources import User, Transfer, Wallet
 
-    user = User.get(1, handler)
+    user = NaturalUser.get(1, handler)
 
-    beneficiary = User.get(2, handler)
+    origin_wallet = Wallet.get(2, handler)
 
-    beneficiary_wallet = Wallet.get(2, handler)
+    beneficiary_wallet = Wallet.get(3, handler)
 
-    transfer = Transfer(payer=user,
-                        beneficiary=beneficiary,
-                        payer_wallet_id=0,
-                        beneficiary_wallet=beneficiary_wallet,
-                        amount=1000)
+    transfer = Transfer(author=user,
+                        cretited_wallet=beneficiary_wallet,
+                        debited_wallet=origin_wallet,
+                        debited_funds=(100, 'EUR'),
+                        fees=('2', 'EUR'))
     transfer.save(handler)
 
     print transfer.get_pk() # 1
 
-    beneficiary_wallet = Wallet.get(2, handler)
-
-    print beneficiary_wallet.collected_amount # 1000
+    print beneficiary_wallet.credited_funds # 98
 
 Transfer refunds
 ................

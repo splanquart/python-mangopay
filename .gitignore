@@ -9,3 +9,4 @@ tests/credentials.py
 docs/_build/
 .project
 .pydevproject
+.idea

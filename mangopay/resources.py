@@ -235,3 +235,35 @@ class Refund(BaseModel):
 
     def is_success(self):
         return self.status == Refund.STATUS_CHOICES.succeeded
+
+
+@python_2_unicode_compatible
+class Transfer(BaseModel):
+    STATUS_CHOICES = Choices(
+        ('CREATED', 'created', 'Created'),
+        ('SUCCEEDED', 'succeeded', 'Succeeded'),
+        ('FAILED', 'failed', 'Failed')
+    )
+    author = ForeignKeyField(User, api_name='AuthorId', required=True,
+                             related_name='transfers')
+    credited_wallet = ForeignKeyField(Wallet, api_name='CreditedWalletId',
+                                      related_name='transfers', required=True)
+    credited_user_id = ForeignKeyField(User, api_name='CreditedUserId',
+                                       related_name='transfers', required=False)
+    debited_wallet = ForeignKeyField(Wallet, api_name='DebitedWalletId',
+                                     related_name='transfers', required=True)
+    debited_funds = AmountField(api_name='DebitedFunds', required=True)
+    fees = AmountField(api_name='Fees', required=True)
+    credited_funds = AmountField(api_name='CreditedFunds', required=False)
+    status = CharField(api_name='Status', required=False,
+                       choices=STATUS_CHOICES)
+    result_code = CharField(api_name='ResultCode')
+    result_message = CharField(api_name='ResultMessage')
+    execution_date = DateTimeField(api_name='ExecutionDate')
+
+    class Meta:
+        verbose_name = 'transfer'
+        verbose_name_plural = 'transfers'
+
+    def is_success(self):
+        return self.status == Refund.STATUS_CHOICES.succeeded
