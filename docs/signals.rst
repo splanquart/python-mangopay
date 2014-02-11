@@ -15,7 +15,7 @@ There is 5 signals :
  - pre_save
  - post_save
 
-Example :
+Example ::
 
     from mangopay.signals import request_started
 
@@ -25,3 +25,4 @@ Example :
     request_started.connect(print_infos)
 
     # do something with python-mangopay
+
