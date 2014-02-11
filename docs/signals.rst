@@ -5,7 +5,7 @@ Signals
 =======
 
 To debug some feature we want to know what data are send to MangoPay.
-For do that you can use signals pluged in python-mangopay.
+For do that you can use signals plugged in python-mangopay.
 
 There is 5 signals :
 

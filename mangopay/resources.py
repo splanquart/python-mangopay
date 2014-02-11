@@ -55,7 +55,7 @@ class NaturalUser(User):
 class LegalUser(User):
     LEGAL_PERSON_TYPE_CHOICES = Choices(
         ('BUSINESS', 'business', 'business'),
-        ('ORGANIZATION', 'origanization', 'organization')
+        ('ORGANIZATION', 'organization', 'organization')
     )
     name = CharField(api_name='Name', required=True)
     legal_person_type = CharField(api_name='LegalPersonType', required=True,
