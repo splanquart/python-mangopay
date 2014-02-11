@@ -11,7 +11,8 @@
 # All configuration values have a default; values that are commented out
 # serve to show the default.
 
-import sys, os
+import sys  # noqa
+import os  # noqa
 
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
@@ -41,7 +42,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'python-mangopay'
-copyright = u'2014, Stephane Planquart and contributors'
+copyright = u'2014, Stephane Planquart, Florent Messa and contributors'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -174,21 +175,21 @@ htmlhelp_basename = 'python-mangopaydoc'
 # -- Options for LaTeX output --------------------------------------------------
 
 latex_elements = {
-# The paper size ('letterpaper' or 'a4paper').
-#'papersize': 'letterpaper',
+    # The paper size ('letterpaper' or 'a4paper').
+    #'papersize': 'letterpaper',
 
-# The font size ('10pt', '11pt' or '12pt').
-#'pointsize': '10pt',
+    # The font size ('10pt', '11pt' or '12pt').
+    #'pointsize': '10pt',
 
-# Additional stuff for the LaTeX preamble.
-#'preamble': '',
+    # Additional stuff for the LaTeX preamble.
+    #'preamble': '',
 }
 
 # Grouping the document tree into LaTeX files. List of tuples
 # (source start file, target name, title, author, documentclass [howto/manual]).
 latex_documents = [
-  ('index', 'python-mangopay.tex', u'python-mangopay Documentation',
-   u'2014, Florent Messa, Stephane Planquart and contributors', 'manual'),
+    ('index', 'python-mangopay.tex', u'python-mangopay Documentation',
+     u'2014, Stephane Planquart, Florent Messa and contributors', 'manual'),
 ]
 
 # The name of an image file (relative to this directory) to place at the top of
@@ -218,7 +219,7 @@ latex_documents = [
 # (source start file, name, description, authors, manual section).
 man_pages = [
     ('index', 'python-mangopay', u'python-mangopay Documentation',
-     [u'2014, Florent Messa, Stephane Planquart and contributors'], 1)
+     [u'2014, Stephane Planquart, Florent Messa and contributors'], 1)
 ]
 
 # If true, show URL addresses after external links.
@@ -231,9 +232,10 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-  ('index', 'python-mangopay', u'python-mangopay Documentation',
-   u'2014, Florent Messa, Stephane Planquart and contributors', 'python-mangopay', 'One line description of project.',
-   'Miscellaneous'),
+    ('index', 'python-mangopay', u'python-mangopay Documentation',
+     u'2014, Stephane Planquart, Florent Messa and contributors',
+     'python-mangopay', 'One line description of project.',
+     'Miscellaneous'),
 ]
 
 # Documents to append as an appendix to all manuals.
