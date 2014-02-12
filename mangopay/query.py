@@ -25,6 +25,7 @@ class SelectQuery(BaseQuery):
     identifier = 'SELECT'
 
     def __init__(self, model, *args, **kwargs):
+        self.select_query = kwargs
         super(SelectQuery, self).__init__(model, 'GET')
 
     def get(self, reference, handler, resource_model=None):
@@ -33,9 +34,10 @@ class SelectQuery(BaseQuery):
                 url = '/%s/%d' % (self.model._meta.verbose_name_plural,
                                   reference)
             else:
-                url = '/%s/%d/%s' % (resource_model._meta.verbose_name_plural,
-                                     reference,
-                                     self.model._meta.verbose_name_plural)
+                url = '/%s/%d/%s/%d' % (resource_model._meta.verbose_name_plural,
+                                        resource_model.get_pk(),
+                                        self.model._meta.verbose_name_plural,
+                                        reference)
 
             result, data = handler.request(self.method, url)
         except APIError as e:

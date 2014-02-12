@@ -196,6 +196,44 @@ Creating a transfer from a personal wallet to another wallet ::
 
     print beneficiary_wallet.credited_funds # 98
 
+Payout
+......
+
+If you want to transfer funds on a bank account you must create a Payout ::
+
+    from mangopay.resources import NaturalUser, Payout, BankAccount
+
+    bank_account = BankAccount.get(1547373,
+                                   handler,
+                                   resource_model=user)
+
+    bank_transfer = Payout(author=user,
+                           debited_wallet=wallet,
+                           debited_funds=(20,'EUR'),
+                           fees=(1,'EUR'),
+                           bank_account=bank_account)
+
+    bank_transfer.save(handler)
+
+    print bank_transfer.get_pk() # 1
+
+BankAccount
+...........
+
+For create a BankAccount ::
+
+    from mangopay.resources import NaturalUser, Payout, BankAccount
+
+    bank_account = BankAccount(user=user,
+                               owner_name='Stephane Planquart',
+                               owner_address='1 rue de paris, 75006 Paris',
+                               iban='FR3020041010124530725S03383',
+                               bic='CRLYFRPP')
+
+    bank_account.save(handler)
+
+    print bank_account.get_pk() # 1
+
 Transfer refunds
 ................
 

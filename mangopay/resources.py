@@ -45,7 +45,12 @@ class NaturalUser(User):
 
     class Meta:
         verbose_name = 'natural_user'
-        verbose_name_plural = 'users/natural'
+        verbose_name_plural = 'users'
+
+    urls = {
+        InsertQuery.identifier: lambda params: '/users/natural/%s' % params['id'],
+        UpdateQuery.identifier: lambda params: '/users/natural/%s' % params['id'],
+    }
 
     def __str__(self):
         return '%s %s' % (self.first_name, self.last_name)
@@ -79,6 +84,11 @@ class LegalUser(User):
     class Meta:
         verbose_name = 'legal_user'
         verbose_name_plural = 'users/legal'
+
+    urls = {
+        InsertQuery.identifier: lambda params: '/users/legal/%s' % params['id'],
+        UpdateQuery.identifier: lambda params: '/users/legal/%s' % params['id'],
+    }
 
     def __str__(self):
         return self.name
@@ -267,3 +277,45 @@ class Transfer(BaseModel):
 
     def is_success(self):
         return self.status == Refund.STATUS_CHOICES.succeeded
+
+
+@python_2_unicode_compatible
+class BankAccount(BaseModel):
+    user = ForeignKeyField(User, api_name='UserId', required=True,
+                           related_name='bank_account')
+    type = CharField(api_name='Type', default="IBAN")
+    owner_name = CharField(api_name='OwnerName', required=True)
+    owner_address = CharField(api_name='OwnerAddress', required=True)
+    iban = CharField(api_name='IBAN', required=True)
+    bic = CharField(api_name='BIC', required=True)
+
+    class Meta:
+        verbose_name = 'bankaccount'
+        verbose_name_plural = 'bankaccounts'
+
+    def __str__(self):
+        return '%s, %s' % (self.iban, self.bic)
+
+
+@python_2_unicode_compatible
+class Payout(BaseModel):
+    bank_account = ForeignKeyField(BankAccount, api_name='BankAccountId',
+                                   required=True, related_name='payouts')
+    author = ForeignKeyField(User, api_name='AuthorId', required=True,
+                             related_name='transfers')
+    debited_wallet = ForeignKeyField(Wallet, api_name='DebitedWalletId',
+                                     related_name='transfers', required=True)
+    debited_funds = AmountField(api_name='DebitedFunds', required=True)
+    fees = AmountField(api_name='Fees', required=True)
+
+    class Meta:
+        verbose_name = 'payout'
+        verbose_name_plural = 'payouts'
+
+    urls = {
+        InsertQuery.identifier: '/payouts/bankwire',
+        UpdateQuery.identifier: None,
+    }
+
+    def __str__(self):
+        return '%d, %s' % self.debited_funds
