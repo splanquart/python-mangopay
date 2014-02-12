@@ -282,7 +282,7 @@ class Transfer(BaseModel):
 @python_2_unicode_compatible
 class BankAccount(BaseModel):
     user = ForeignKeyField(User, api_name='UserId', required=True,
-                           related_name='bank_account')
+                           related_name='bank_accounts')
     type = CharField(api_name='Type', default="IBAN")
     owner_name = CharField(api_name='OwnerName', required=True)
     owner_address = CharField(api_name='OwnerAddress', required=True)

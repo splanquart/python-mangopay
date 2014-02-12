@@ -203,6 +203,8 @@ If you want to transfer funds on a bank account you must create a Payout ::
 
     from mangopay.resources import NaturalUser, Payout, BankAccount
 
+    user = NaturalUser.get(1, handler)
+
     bank_account = BankAccount.get(1547373,
                                    handler,
                                    resource_model=user)
@@ -222,7 +224,7 @@ BankAccount
 
 For create a BankAccount ::
 
-    from mangopay.resources import NaturalUser, Payout, BankAccount
+    from mangopay.resources import NaturalUser, BankAccount
 
     bank_account = BankAccount(user=user,
                                owner_name='Stephane Planquart',
@@ -233,6 +235,16 @@ For create a BankAccount ::
     bank_account.save(handler)
 
     print bank_account.get_pk() # 1
+
+
+For get a BankAccount, don't forget that in MangoPay V2's model, a BankAccount is inside a user.
+You must have a User object to get a bank_account ::
+
+    from mangopay.resources import NaturalUser, BankAccount
+
+    user = NaturalUser.get(1, handler)
+
+    bank_account = BankAccount.get(1, handler, resource_model=user)
 
 Transfer refunds
 ................
