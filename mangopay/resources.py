@@ -20,6 +20,7 @@ class BaseModel(BaseApiModel):
 @python_2_unicode_compatible
 class User(BaseModel):
     email = EmailField(api_name='Email', required=True)
+    person_type = EmailField(api_name='PersonType', required=True)
 
     class Meta:
         verbose_name = 'user'
@@ -117,7 +118,7 @@ class Wallet(BaseModel):
         verbose_name_plural = 'wallets'
 
     def __str__(self):
-        return self.description
+        return '%d | %s' % (self.id, self.description)
 
 
 class Payin(BaseModel):
@@ -319,3 +320,42 @@ class Payout(BaseModel):
 
     def __str__(self):
         return '%d, %s' % self.debited_funds
+
+
+@python_2_unicode_compatible
+class Transaction(BaseModel):
+    STATUS_CHOICES = Choices(
+        ('CREATED', 'created', 'Created'),
+        ('SUCCEEDED', 'succeeded', 'Succeeded'),
+        ('FAILED', 'failed', 'Failed')
+    )
+    TYPE_CHOICES = Choices(
+        ('PAY_IN', 'pay_in', 'Pay In'),
+        ('PAY_OUT', 'pay_out', 'Pay Out'),
+        ('TRANSFER', 'transfer', 'Transfer')
+    )
+    author = ForeignKeyField(User, api_name='AuthorId', required=True,
+                             related_name='transactions')
+    credited_user_id = ForeignKeyField(User, api_name='CreditedUserId',
+                                       related_name='transactions', required=False)
+    debited_funds = AmountField(api_name='DebitedFunds', required=True)
+    credited_funds = AmountField(api_name='CreditedFunds', required=False)
+    fees = AmountField(api_name='Fees', required=False)
+    status = CharField(api_name='Status', required=False,
+                       choices=STATUS_CHOICES, default=STATUS_CHOICES.created)
+    result_code = CharField(api_name='ResultCode')
+    result_message = CharField(api_name='ResultMessage')
+    execution_date = DateTimeField(api_name='ExecutionDate')
+    type = CharField(api_name='Type', choices=TYPE_CHOICES)
+    nature = CharField(api_name='Nature')
+    credited_wallet = ForeignKeyField(Wallet, api_name='CreditedWalletId',
+                                      related_name='transactions', required=True)
+    debited_wallet = ForeignKeyField(Wallet, api_name='DebitedWalletId',
+                                     related_name='transactions', required=True)
+
+    class Meta:
+        verbose_name = 'transaction'
+        verbose_name_plural = 'transactions'
+
+    def __str__(self):
+        return '%d | %.2f %s' % (self.id, round(self.debited_funds[0] / 100, 2), self.debited_funds[1])
